@@ -269,7 +269,7 @@ text-align:left;
 
 .support-row-header {
 text-align: center;
-max-width: 6em;
+/* max-width: 6em; */
 text-transform: uppercase;
 }
 
@@ -315,6 +315,77 @@ text-align:center;
   flex-grow: 1;
 }
 
+.test2{
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: .5; }
+}
+
+.controls div{
+  padding: 1em;
+  text-align: center;
+  background: lightgrey;
+  margin: 1px;
+  display: inline-block;
+}
+.controls div.selected{
+  background: #516692;
+  color: white;
+}
+.controls div:hover{
+  background:#516692;
+  color: white;
+  cursor: pointer;
+}
+.controls {
+  width: 520px;
+}
+
+.detailedmap {
+  fill: #A7C6ED;
+}
+
+#country-wrapper .detailed, #projects-wrapper{
+  display: none;
+}
+
+#country-wrapper.show .detailed, #projects-wrapper.show {
+  display: inline;
+}
+
+#country-wrapper.show .overview {
+  display: none;
+}
+
+/* map layer colors */
+.activelayer{
+  fill: pink;
+}
+
+.map-countries:hover,.map-countries.hover{
+  fill: #0067B9;
+}
+
+.select-test {
+  fill: purple;
+}
+
+.map-countries.selected{
+  fill: hotpink;
+}
+
+.legend i, .legend2 i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin: 0 8px 0 0;
+}
+
+.legend2{
+  display:none;
+}
 
 /* hide to show support stuff */
 /* .support-table, .coordination-list{

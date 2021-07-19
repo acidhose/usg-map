@@ -10,18 +10,29 @@ $(document).ready(function () {
     let prevLayerClicked = null;
     let prevPinClicked = null;
 
+    let mapType = "overview";
+    let usaidRed = "#BA0C2F";
+
     $.getJSON(jsonlink, function (data) {
         let countries = [];
+        let countries2 = [];
 
+        // console.log(data);
+        
         $.each(data, function(i, item) {
 			let name = data[i].name;
 			let description = data[i].description;
             let country = data[i].Country;
             let support = data[i]["Support List"];
+            let supportnum = data[i]["Number of Supporting Agencies"];
             countries.push(country);
+            countries2.push([country, supportnum]);
         });
 
+        console.log(countries2);
+
         let countriesList = [...new Set(countries)];
+        let countriesList2 = [...new Set(countries2)];
 
         /* Build Select List */
         let countrySelect = '<option name="none">Select Country or Region</option>';
@@ -48,12 +59,10 @@ $(document).ready(function () {
 
             //go through json to find all matching countries
             let countryResult = '<div class="current-country">' + selectedCountry + '</div>';
-            // let countryResult = '<div class="current-country">Region: ' + selectedCountry + '</div>';
 
             //set up variables
             let agencies = '';
-            var programResult = '<h2>Country Activities</h2>';
-
+            var programResult = '<h2>Country Activities</h2>';        
 
             //support array
             let supportArr = [];
@@ -256,10 +265,6 @@ $(document).ready(function () {
                     //     <tr>  </tr>
                     // </table>
 
-                    // console.log ("this ->");
-                    // console.log(supportHolder);
-                    // console.log ("<- this");
-
                     supporttable += '<table class="support-table rtable rtable--flip"><tr>';
                     supporttable += '<th class="top-left"> </th>';
                     supporttable += '<th>Pre-Primary Education Support</th>';
@@ -267,14 +272,7 @@ $(document).ready(function () {
                     supporttable += '<th>Secondary Education Support</th>';
                     supporttable += '<th>Post-Secondary Education Support</th>';
                     supporttable += '<th>WFD Support List</th>';
-                    supporttable += '<th>Systems Strengthening Support</th>';     
-                    // supporttable += '<th>' + supportHolder[0][0] + '</th>';
-                    // supporttable += '<th>' + supportHolder[1][0] + '</th>';
-                    // supporttable += '<th>' + supportHolder[2][0] + '</th>';
-                    // supporttable += '<th>' + supportHolder[3][0] + '</th>';
-                    // supporttable += '<th>' + supportHolder[4][0] + '</th>';
-                    // supporttable += '<th>' + supportHolder[5][0] + '</th>';        
-
+                    supporttable += '<th>Systems Strengthening Support</th>';      
 
                     supporttable += '</tr>';
 
@@ -341,8 +339,8 @@ $(document).ready(function () {
                         return value;
                     }
 
-                    
-                    countryResult += "<h2>USG BE Support by Education Level(s) and Agency</h2>";
+                    countryResult += '<div class="detailed">'; //detailed wrapper
+                    countryResult += '<h2>USG BE Support by Education Level(s) and Agency</h2>';
                     countryResult += '<div>' + supporttable + '</div>';
                     countryResult += '<p><span class="supporting-agencies">Supporting Agencies:</span> ' + agencies  + '</p>';
                     // countryResult += '<p>Coordination List: <br>' + coordinationlist + '</p>';
@@ -367,6 +365,8 @@ $(document).ready(function () {
                         countryResult += '</div>';
                     }
                     countryResult += '</div>';
+                    countryResult += '</div><!-- .detailed -->';//detailed
+                    countryResult += '<div class="overview"><p><span class="supporting-agencies">Supporting Agencies:</span> ' + agencies  + '</p></div>';
 
 //// Next stuff
 
@@ -407,14 +407,23 @@ $.getJSON(jsonlink2, function (data2) {
             // if (subawardees!='') { programResult += '<span class="project-subawardees"><strong>Subawardees :</strong> ' + subawardees + '</span>';
 			// }
             
-            programResult += '<span class="project-edulevel"><strong>Education Level:</strong> ';
-
+            
+            var educationLevels = '';
+            
             checkEduLevel(data2[i]["Pre-Primary"], 'Pre-Primary');
             checkEduLevel(data2[i]["Primary"], 'Pre-Primary');
             checkEduLevel(data2[i]["Secondary"], 'Secondary');
             checkEduLevel(data2[i]["Workforce Development"], 'Workforce Development');
             checkEduLevel(data2[i]["Education Systems Strengthening"], 'Education Systems Strengthening');
             
+            if (educationLevels){
+                programResult += '<span class="project-edulevel"><strong>Education Level:</strong> ';
+                educationLevels = educationLevels.replace(/,\s*$/, ""); //remove final comma
+                programResult += educationLevels;
+            }
+            
+            console.log(educationLevels);
+
             programResult += '</span>';
 
             if (link!='') { programResult += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
@@ -430,7 +439,7 @@ $.getJSON(jsonlink2, function (data2) {
         }
         if (i+1 === count2) {
         // if (i+1 === count) {
-            console.log ("result has been added!!!!");
+            // console.log ("result has been added!!!!");
             $("#projects-wrapper").html(programResult);
             //create accordian
             $("#projects-wrapper" ).accordion({
@@ -446,9 +455,12 @@ $.getJSON(jsonlink2, function (data2) {
         // var eduLevels = [];
         function checkEduLevel(check, title, addTo){
             if (check.toUpperCase() == "X"){
-                programResult += title + ', ';
+                // programResult += title + ', ';
+                educationLevels += title + ', ';
+                
                 // console.log("it worked!!! " + addTo);
             }
+            return educationLevels;
             // return eduLevels;
         }
         
@@ -463,41 +475,7 @@ $.getJSON(jsonlink2, function (data2) {
 
 });
 
-// $.each(data, function(i, item) {
-    //     let country = data[i].Country;
-    
-    //     if (country == selectedCountry) {
-        
-        //         //create variables
-        //         let name = data[i].name;
-        //         let description = data[i].description;
-        //         let start = data[i].start;
-        //         let end = data[i].end;
-        //         let implementorname = data[i].implementorname;
-        //         let subawardees = data[i].subawardees;
-        //         let link = data[i].link;
-        
-        //         // add to result
-        //         programResult += 'hi<div class="wrap"><h2 class="project-name">' + name + '</h2>';
-        //         programResult += '<div><span class="project-description">' + description + '</span>';
-        //         programResult += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';
-        //         if (implementorname!='') { programResult += '<span class="project-implementorname"><strong>Implementor:</strong> ' + implementorname + '</span>';}
-        //         if (subawardees!='') { programResult += '<span class="project-subawardees"><strong>Subawardees:</strong> ' + subawardees + '</span>';}
-        //         if (link!='') { programResult += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
-        //         programResult += '</div></div>';
-        //     }
-        
-        // });
-        
-        //add variables to html 
-
-        $("#country-wrapper").html(countryResult);
-
-        // console.log("changed ---- > " + programResult);
-        // $("#country-wrapper").html("<h1>hi bich!!!</h1>");
-        // $("#projects-wrapper").html(programResult);
-        // $("#projects-wrapper").html("<h2>baby!!</h2>");
-        
+        $("#country-wrapper").html(countryResult);  
 
             // highlight country 
             geojson.eachLayer(function(layer) {
@@ -508,7 +486,10 @@ $.getJSON(jsonlink2, function (data2) {
                         prevLayerClicked.setStyle(solidStyle);
                         map.closePopup();
                     }
-                    layer.setStyle({ 'fillColor' : '#BA0C2F' });
+                    // layer.setStyle({ 'fillColor' : usaidRed });
+                    // layer.setStyle({ fillOpacity: .7});
+                    layer.setStyle(selectStyle);
+                    console.log(layer);
                     prevLayerClicked = layer;                    
                 }
 
@@ -516,49 +497,62 @@ $.getJSON(jsonlink2, function (data2) {
                     prevPinClicked.setIcon(pinIcon);
                 }
             })
-
-            //if equals pin layer then do something
-            map.eachLayer(function (layer) {
-                let altName = layer.options.alt;
-
-                if(typeof altName !== "undefined"){
-                    if (altName == selectedCountry){                        
-                        layer.setIcon(pinIconSelected);
-                        if (prevLayerClicked !== null){
-                            prevLayerClicked.setStyle(solidStyle);
-                        }
-                        //reset pin
-                        if (prevPinClicked !== null){
-                            prevPinClicked.setIcon(pinIcon);
-                        }
-                        prevPinClicked = layer;
-                        layer.setIcon(pinIconSelected);
-                    }
-                }
-            });
         });
         
         let othercountries = '';
+        
+        console.log(countriesMap);
+
+
+
         //iterate through countriesMap variable
-        let geojson = L.geoJSON(countriesMap, {style: solidStyle, onEachFeature: onEachFeature})
-        .eachLayer(function (layer) {
-            let thislayercountry = layer.feature.properties.name;
-            if (countriesList.includes(thislayercountry)){
-                layer.addTo(map)
-            }
-            //popup
-            layer
-                .on('click', function(layer) {
-                    $('#countries-select').val(thislayercountry).trigger('change');
-                })
-            othercountries += thislayercountry;
-        });//L.geoJSON eachLayer function
+        if (mapType == 'overview'){
+        console.log("overview");
+
+            var geojson = L.geoJSON(countriesMap, {style: solidStyle, onEachFeature: onEachFeature})
+            .eachLayer(function (layer) {
+                let thislayercountry = layer.feature.properties.name;
+
+                if (exists(countriesList2, thislayercountry) ){ //checking 2 dim array    
+                    layer.addTo(map) //adds countries to map
+                    countriesList2.forEach(e => {
+
+                        if (e[0] == thislayercountry) {
+                            console.log(layer);
+                            layer.setStyle({ "fillColor": getColor(e[1])}); //set color based on second value in array via getColor fn
+                            // layer.setStyle(testStyle);
+                            console.log(e[1]);
+                            layer.bindTooltip('<strong>' + layer.feature.properties.name + '</strong>' + '<br>Number of Supporting Agencies: ' + e[1]);
+                        }
+
+                    });
+                }
+
+                // if (countriesList.includes(thislayercountry)){
+                //     layer.addTo(map)
+                // }
+
+                function exists(arr, search) {
+                    return arr.some(row => row.includes(search)); //returns true
+                }
+
+                //popup
+                layer
+                    .on('click', function(layer) {
+                        $('#countries-select').val(thislayercountry).trigger('change');
+                    })
+                othercountries += thislayercountry;
+            });//L.geoJSON eachLayer function
+        }//overview
+
+
 
         let prevLayerClicked = null;
         function clickFeature(e) {
             let layer = e.target;
 
-            layer.setStyle({ "fillColor": "#BA0C2F" })
+            layer.setStyle({ "fillColor": usaidRed })
+
             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                 layer.bringToFront();
             }
@@ -570,15 +564,19 @@ $.getJSON(jsonlink2, function (data2) {
         
         function resetHighlight(e) {
             let layer = e.target;
-            layer.setStyle({ color: '#fff' });
+            // layer.setStyle({ color: '#fff' });
         }
 
         function highlightFeature(e) {
             let layer = e.target;
-            layer.setStyle({ color: '#BA0C2F' });
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                layer.bringToFront();
-            }
+            // layer.bringToFront();
+
+            console.log("highlight");
+            // layer.setStyle({ color: usaidRed});
+
+            // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            //     layer.bringToFront();
+            // }
         }
 
         function onEachFeature(feature, layer) {
@@ -588,25 +586,27 @@ $.getJSON(jsonlink2, function (data2) {
             });
         }
 
-
+        function onClickMap(e) {
+            e.layer._icon.classList.add('activemarker');
+        }
 
         function getColor(d) {
-            return  d > 4 ? 'rgb(185, 185, 185)' :
-                    d > 3 ? 'rgb(173, 198, 237)' :
-                    d > 2 ? 'rgb(138, 162, 205)' :
-                    d > 1 ? 'rgb(106, 130, 176)' :
+            return  d == 1 ? '#aec7eb' :
+                    d == 2 ? '#8ba3cb' :
+                    d == 3 ? '#6b83ae' :
+                    d >= 4 ? '#516692' :
                             'rgb(80, 101, 148)'; //none?
         }
         
-
-        function style(feature) {
+        //sample
+        function solidStyle2(feature) {
             return {
-                fillColor: getColor(feature.properties.density),
-                weight: 2,
-                opacity: 1,
-                color: 'white',
-                dashArray: '3',
-                fillOpacity: 0.7
+                "color": "#fff",
+                "fillColor": "#A7C6ED",
+                "fillOpacity": 1.0,
+                "opacity": 1,
+                "weight": 2,
+                "className": "map-countries",
             };
         }
 
@@ -623,16 +623,85 @@ $.getJSON(jsonlink2, function (data2) {
         minZoom: 1
     }).addTo(map);
 
-    /*
-     * Install Note: Change url to location of pin.png and pin_red.png   
-     */
-
     let solidStyle = {
         "color": "#fff",
-        "weight": 2,
-        "fillColor": "#A7C6ED",
+        // "fillColor": "#A7C6ED",
+        
+        "fillOpacity": 1,
         "opacity": 0.5,
-        "fillOpacity": 1.0
+        "weight": 2,
+        "className": "map-countries",
     };
+
+    //style when selected
+    let selectStyle = {
+        "color" : usaidRed,
+        className : "select-test"
+    }
+
+
+    /*Legend specific*/
+    var legend = L.control({ position: "bottomleft" });
+
+    legend.onAdd = function(map) {
+        var legendKey = L.DomUtil.create("div", "legend");
+        legendKey.innerHTML += "<h4>Number of Supporting Agencies</h4>";
+        legendKey.innerHTML += '<i style="background: #516692"></i><span>1</span><br>';
+        legendKey.innerHTML += '<i style="background: #6b83ae"></i><span>2</span><br>';
+        legendKey.innerHTML += '<i style="background: #8ba3cb"></i><span>3</span><br>';
+        legendKey.innerHTML += '<i style="background: #aec7eb"></i><span>4</span><br>';
+                
+        return legendKey;
+    };
+
+    var legend2 = L.control({ position: "bottomleft" });
+
+    legend2.onAdd = function(map) {
+        var legendKey2 = L.DomUtil.create("div", "legend2");
+        legendKey2.innerHTML += '<i style="background: #A7C6ED"></i><span>Highlighted country contains the agencies & education levels you selected.</span><br>';
+                    
+        return legendKey2;
+    };
+
+    legend.addTo(map);
+    legend2.addTo(map);
+
+    // Controls
+    
+    $(".map1").click(function() {
+        $(this).addClass("selected");
+        $(this).siblings().removeClass("selected");
+        console.log( "Map1 selected" );
+        $(".map-countries").removeClass("detailedmap");
+        $("#country-wrapper").removeClass("show");
+        $("#projects-wrapper").removeClass("show");
+        $(".legend").show();
+        $(".legend2").hide();
+    });
+    
+    $(".map2").click(function() {
+        $(this).addClass("selected");
+        $(this).siblings().removeClass("selected");
+        console.log("Map2 selected." );
+        $(".map-countries").addClass("detailedmap");
+        $("#country-wrapper").addClass("show");
+        $("#projects-wrapper").addClass("show");        
+        $(".legend").hide();
+        $(".legend2").show();
+    });
+
+    $(".map-countries").hover(function() {
+        $(this).addClass("hover");
+    });
+
+    $(".map-countries").click(function() {
+        $(this).addClass("selected");
+        // $(this).siblings().removeClass("selected");
+        console.log("click");
+    });
+
+
+
+
 
 });
