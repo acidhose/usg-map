@@ -360,21 +360,21 @@ text-align:center;
 }
 
 /* map layer colors */
-.activelayer{
+/* .activelayer{
   fill: pink;
-}
+} */
 
-.map-countries:hover,.map-countries.hover{
+/* .map-countries:hover,.map-countries.hover{
   fill: #0067B9;
-}
+} */
 
-.select-test {
+/* .select-test {
   fill: purple;
 }
 
 .map-countries.selected{
   fill: hotpink;
-}
+} */ 
 
 .legend i, .legend2 i {
   width: 18px;
@@ -383,7 +383,7 @@ text-align:center;
   margin: 0 8px 0 0;
 }
 
-.legend2{
+.legend2, .mapfilter{
   display:none;
 }
 

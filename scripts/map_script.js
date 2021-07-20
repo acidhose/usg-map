@@ -12,6 +12,7 @@ $(document).ready(function () {
 
     let mapType = "overview";
     let usaidRed = "#BA0C2F";
+    let usaidLightBlue = "#A7C6ED";
 
     $.getJSON(jsonlink, function (data) {
         let countries = [];
@@ -20,16 +21,44 @@ $(document).ready(function () {
         // console.log(data);
         
         $.each(data, function(i, item) {
+            // console.log(data[i]);
 			let name = data[i].name;
 			let description = data[i].description;
             let country = data[i].Country;
-            let support = data[i]["Support List"];
+            // let support = data[i]["Support List"];
             let supportnum = data[i]["Number of Supporting Agencies"];
+            let preprimary = data[i]["Pre-Primary Education Support"];
+            let primary = data[i]["Primary Education Support"];
+            let secondary = data[i]["Secondary Education Support"];
+            let postsecondary = data[i]["Post-Secondary Education Support"];
+            let wfdsupport = data[i]["WFD Support List"];
+            let systems = data[i]["Systems Strengthening Support"];
+
+            let agencysupport = data[i]["Agency Support"];
+
+            let alias = '';
+            
+            if (agencysupport > 0){
+            let agency = data[i]["Agency"];
+                if (agency == 'U.S. Department of Agriculture'){ alias = 'usda'} 
+                if (agency == 'U.S. Department of Labor'){ alias = 'usdol'} 
+                if (agency == 'U.S. Department of State'){ alias = 'usdos'} 
+                if (agency == 'Millennium Challenge Corporation'){ alias = 'mcc'} 
+                if (agency == 'U.S. Peace Corps'){ alias = 'uspc'} 
+                if (agency == 'USAID'){ alias = 'usaid'} 
+            }
+
+            // Support List
+            // Types of Coordination
             countries.push(country);
-            countries2.push([country, supportnum]);
+            countries2.push([country, supportnum, preprimary, primary, secondary, postsecondary, wfdsupport, systems, alias]);
+            // countries2.push([country, supportnum, support]);
+            if ( country = "Brazil" ){
+                // console.log(countries2);
+            }
         });
 
-        console.log(countries2);
+        // console.log(countries2);
 
         let countriesList = [...new Set(countries)];
         let countriesList2 = [...new Set(countries2)];
@@ -81,16 +110,18 @@ $(document).ready(function () {
             var support4 = 0;
             var support5 = 0;
 
-            function supportTest(support0, support1, support2, support3, support4, support5) {
+            // function supportTest(support0, support1, support2, support3, support4, support5) {
+            function supportTest(support0, support1, support2, support3, support4) {
                 this.support0 = support0;
                 this.support1 = support1;
                 this.support2 = support2;
                 this.support3 = support3;
                 this.support4 = support4;
-                this.support5 = support5;
+                // this.support5 = support5;
               }
             
-            var supportBar = new supportTest (0, 0, 0, 0, 0, 0);
+            // var supportBar = new supportTest (0, 0, 0, 0, 0, 0);
+            var supportBar = new supportTest (0, 0, 0, 0, 0);
 
             supportHolder = [];
             supportHolder.push(["usda", 0, supportBar]);
@@ -99,7 +130,7 @@ $(document).ready(function () {
             supportHolder.push(["mcc", 0, supportBar]);
             supportHolder.push(["uspc", 0, supportBar]);
             supportHolder.push(["usaid", 0, supportBar]);
-
+            
             //build coordination array
             let coordArr = [];
             coordArr.push(["Non-USG Meetings and Events", 0]);
@@ -114,15 +145,6 @@ $(document).ready(function () {
             coordArr.push(["Cross-Agency Trainings", 0]);
             coordArr.push(["Cross-Agency Education Meetings", 0]);
 
-
-            var usda  = 'none';
-            var usdol = 'none';
-            var usdos = 'none';
-            var mcc = 'none';
-            var uspc = 'none';
-            var usaid = 'none';
-
-
             //set vars
             var indexsplice = '0';
 
@@ -136,22 +158,23 @@ $(document).ready(function () {
 
                 let agency = '';
 
-                if (country == selectedCountry && agencysupport == 1) {
+                if (country == selectedCountry && agencysupport >= 1) {
 
-                    console.log(country);
+                    // console.log(country);
 
                     //create variables
                     agency += data[i]["Agency"];
                     agencies += agency + ', ';
 
-                    if (data[i]["Pre-Primary Education Support"] == 1) { support0 = 1 };
-                    if (data[i]["Primary Education Support"] == 1) { support1 = 1 };
-                    if (data[i]["Secondary Education Support"] == 1) { support2 = 1 };
-                    if (data[i]["Post-Secondary Education Support"] == 1) { support3 = 1 };
-                    if (data[i]["WFD Support List"] == 1) { support4 = 1 };
-                    if (data[i]["Systems Strengthening Support"] == 1) { support5 = 1 };     
+                    if (data[i]["Pre-Primary Education Support"] == 1)      { support0 = 1 };
+                    if (data[i]["Primary Education Support"] == 1)          { support1 = 1 };
+                    if (data[i]["Secondary Education Support"] == 1)        { support2 = 1 };
+                    // if (data[i]["Post-Secondary Education Support"] == 1)   { support3 = 1 };
+                    if (data[i]["WFD Support List"] == 1)                   { support3 = 1 };
+                    if (data[i]["Systems Strengthening Support"] == 1)      { support4 = 1 };
 
-                    var supportFoo = new supportTest(support0, support1, support2, support3, support4, support5);
+                    var supportFoo = new supportTest(support0, support1, support2, support3, support4);
+                    // var supportFoo = new supportTest(support0, support1, support2, support3, support4, support5);
 
                     if (agency == 'U.S. Department of Agriculture'){ alias = 'usda'} 
                     if (agency == 'U.S. Department of Labor'){ alias = 'usdol'} 
@@ -159,7 +182,6 @@ $(document).ready(function () {
                     if (agency == 'Millennium Challenge Corporation'){ alias = 'mcc'} 
                     if (agency == 'U.S. Peace Corps'){ alias = 'uspc'} 
                     if (agency == 'USAID'){ alias = 'usaid'} 
-                    
 
                     if (agency == 'U.S. Department of Agriculture')     { indexsplice = 0 }
                     if (agency == 'U.S. Department of Labor')           { indexsplice = 1 } 
@@ -168,36 +190,15 @@ $(document).ready(function () {
                     if (agency == 'U.S. Peace Corps')                   { indexsplice = 4 } 
                     if (agency == 'USAID')                              { indexsplice = 5 } 
 
-                    // supportHolder.push(["usda", 0, supportBar]);
-
                     var toholder = [alias, 1,  supportFoo];
                     supportHolder.splice(indexsplice, 1, toholder);
 
-                    // console.log(supportHolder);
-
-                    // Replace 1 array element at index with item 
-                    // arr.splice(index,1,item);
-
-                    //eval('var ' + alias + '= new supportTest(country, agency, support0, support1, support2, support3, support4, support5);');
-
-                    // usaid = new supportTest(country, agency, support0, support1, support2, support3, support4, support5);
-
-                    console.log (alias);
                     // U.S. Department of Agriculture
                     // U.S. Department of Labor
                     // U.S. Department of State
                     // Millennium Challenge Corporation
                     // U.S. Peace Corps
                     // USAID
-
-                    // usda
-                    // usdol
-                    // usdos
-                    // mcc
-                    // uspc
-                    // usaid
-
-                    // console.log(supportFoo);
 
                     //Add to coord array
                     if (data[i]["Non-USG Meetings and Events"] == "Yes")                { ++coordArr[0][1] };
@@ -210,33 +211,13 @@ $(document).ready(function () {
                     if (data[i]["Cross-Agency Trainings"] == "Yes")                     { ++coordArr[7][1] };
                     if (data[i]["Cross-Agency Education Meetings"] == "Yes")            { ++coordArr[8][1] };
 
-                    // let name = data[i]["Agency"];
-                    // let description = data[i].description;
-                    // let start = data[i].start;
-                    // let end = data[i].end;
-                    // let implementorname = data[i].implementorname;
-                    // let subawardees = data[i].subawardees;
-                    // let link = data[i].link;
-
-                    // add to result
-                    // programResult += '<div class="wrap"><h2 class="project-name">' + name + '</h2>';
-                    // programResult += '<div><span class="project-description">' + description + '</span>';
-                    // programResult += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';
-                    // if (implementorname!='') { programResult += '<span class="project-implementorname"><strong>Implementor:</strong> ' + implementorname + '</span>';}
-                    // if (subawardees!='') { programResult += '<span class="project-subawardees"><strong>Subawardees:</strong> ' + subawardees + '</span>';}
-                    // if (link!='') { programResult += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
-                    // programResult += '</div></div>';
-
-                    // console.log ("support first ->" + support0);
-
-                    // // add to result
-                    // programResult += '<div class="wrap"><h2 class="project-name">' + name + '</h2>';
-                    // programResult += '<div><span class="project-description">' + description + '</span>';
-                    // programResult += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';
-                    // if (implementorname!='') { programResult += '<span class="project-implementorname"><strong>Implementor:</strong> ' + implementorname + '</span>';}
-                    // if (subawardees!='') { programResult += '<span class="project-subawardees"><strong>Subawardees:</strong> ' + subawardees + '</span>';}
-                    // if (link!='') { programResult += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
-                    // programResult += '</div></div>';
+                    support0 = 0;
+                    support1 = 0;
+                    support2 = 0;
+                    support3 = 0;
+                    support4 = 0;
+                    support5 = 0;
+                    
                 }
 
 
@@ -244,92 +225,66 @@ $(document).ready(function () {
                 if (i+1 === count) {
                     agencies = agencies.replace(/,\s*$/, "");
 
-
                     let supporttable = "";
-                    // //iterate through coordination array
-                    // for (var i = 0; i < coordArr.length; i++){
-                    //     supporttable += '<div class="support-column">';
-                    //     for (var j = 0; j < coordArr[i].length; j++){
-                    //         if (j == 1) {
-                    //             if (coordArr[i][j] > 0){ supporttable += '<div class="support-cell support-checked">' + 'X' + '</div>'; }
-                    //             else{ supporttable += '<div class="support-cell support-unchecked">' + '<!--None-->' + '</div>'; }
-                    //         }
-                    //         else { supporttable += '<div class="support-header">' + coordArr[i][j] + '</div>'; }
-                    //     }
-                    //     supporttable += '</div>';
-                    // }
-                    // supporttable += '</div>';
-                    
-
-                    // <table>
-                    //     <tr>  </tr>
-                    // </table>
 
                     supporttable += '<table class="support-table rtable rtable--flip"><tr>';
                     supporttable += '<th class="top-left"> </th>';
                     supporttable += '<th>Pre-Primary Education Support</th>';
                     supporttable += '<th>Primary Education Support</th>';
                     supporttable += '<th>Secondary Education Support</th>';
-                    supporttable += '<th>Post-Secondary Education Support</th>';
+                    // supporttable += '<th>Post-Secondary Education Support [del]</th>';
                     supporttable += '<th>WFD Support List</th>';
                     supporttable += '<th>Systems Strengthening Support</th>';      
 
                     supporttable += '</tr>';
 
                     supporttable += '<tr>';                
-                    // supporttable += '<td class="support-row-header">Pre-Primary Education Support</th>';
                     supporttable += '<td class="support-row-header">' + supportHolder[0][0] + '</td>';
                     for (const [key, value] of Object.entries(supportHolder[0][2])) {
                         // supporttable += '<td>' + value + '</td>';
-                        supporttable += '<td>' + testguy(value) + '</td>';
+                        supporttable += '<td>' + checkValue(value) + '</td>';
                     }
                     supporttable += '</tr>';
 
                     supporttable += '<tr>';                
-                    // supporttable += '<td class="support-row-header">Primary Education Support</th>';
                     supporttable += '<td class="support-row-header">' + supportHolder[1][0] + '</td>';
                     for (const [key, value] of Object.entries(supportHolder[1][2])) {
-                        supporttable += '<td>' + testguy(value) + '</td>';
+                        supporttable += '<td>' + checkValue(value) + '</td>';
                     }
                     supporttable += '</tr>';
 
                     supporttable += '<tr>';                
-                    // supporttable += '<td class="support-row-header">Secondary Education Support</td>';
                     supporttable += '<td class="support-row-header">' + supportHolder[2][0] + '</td>';
                     for (const [key, value] of Object.entries(supportHolder[2][2])) {
-                        supporttable += '<td>' + testguy(value) + '</td>';
+                        supporttable += '<td>' + checkValue(value) + '</td>';
                       }
                     supporttable += '</tr>';
 
                     supporttable += '<tr>';                
-                    // supporttable += '<td class="support-row-header">Post-Secondary Education Support</td>';
                     supporttable += '<td class="support-row-header">' + supportHolder[3][0] + '</td>';
                     for (const [key, value] of Object.entries(supportHolder[3][2])) {
-                        supporttable += '<td>' + testguy(value) + '</td>';
+                        supporttable += '<td>' + checkValue(value) + '</td>';
                     }
                     supporttable += '</tr>';
 
                     supporttable += '<tr>';                
-                    // supporttable += '<td class="support-row-header">WFD Support List</td>';
                     supporttable += '<td class="support-row-header">' + supportHolder[4][0] + '</td>';
                     for (const [key, value] of Object.entries(supportHolder[4][2])) {
-                        supporttable += '<td>' + testguy(value) + '</td>';
+                        supporttable += '<td>' + checkValue(value) + '</td>';
                         }
                     supporttable += '</tr>';
 
                     supporttable += '<tr>';                
-                    // supporttable += '<td class="support-row-header">Systems Strengthening Support</td>';        
                     supporttable += '<td class="support-row-header">' + supportHolder[5][0] + '</th>';
                     for (const [key, value] of Object.entries(supportHolder[5][2])) {
-                        supporttable += '<td>' + testguy(value) + '</td>';
+                        supporttable += '<td>' + checkValue(value) + '</td>';
                         }   
                     supporttable += '</tr>';
-
 
                     supporttable += '</table>';
 
 
-                    function testguy(value){
+                    function checkValue(value){
                         if (value == 1 ){
                             value = '<svg xmlns="http://www.w3.org/2000/svg" class="box" width="24" height="24" viewBox="0 0 24 24"><path d="M24 0h-24v24h24v-24z"/></svg>';
                         }
@@ -392,21 +347,14 @@ $.getJSON(jsonlink2, function (data2) {
             let link = data2[i]["Link to Website"];
             let eduLevels = "";
 
-            // console.log(name);
-
             // add to result
             programResult += '<div class="wrap"><h2 class="project-name">' + name + '</h2>';
 
             programResult += '<div><span class="project-description">';
-            // programResult += data2[i]["Country"] + '<br>';
-            programResult += description + '</span>';
-            
+            programResult += description + '</span>';            
             programResult += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';
             programResult += '<span class="project-agency"><strong>Agency:</strong> ' + data2[i]["Agency"] + '</span>';
             if (implementorname!='') { programResult += '<span class="project-implementorname"><strong>Implementor:</strong> ' + implementorname + '</span>';}
-            // if (subawardees!='') { programResult += '<span class="project-subawardees"><strong>Subawardees :</strong> ' + subawardees + '</span>';
-			// }
-            
             
             var educationLevels = '';
             
@@ -422,7 +370,7 @@ $.getJSON(jsonlink2, function (data2) {
                 programResult += educationLevels;
             }
             
-            console.log(educationLevels);
+            // console.log(educationLevels);
 
             programResult += '</span>';
 
@@ -438,9 +386,8 @@ $.getJSON(jsonlink2, function (data2) {
 
         }
         if (i+1 === count2) {
-        // if (i+1 === count) {
-            // console.log ("result has been added!!!!");
             $("#projects-wrapper").html(programResult);
+            
             //create accordian
             $("#projects-wrapper" ).accordion({
                 animate: 200,
@@ -457,8 +404,6 @@ $.getJSON(jsonlink2, function (data2) {
             if (check.toUpperCase() == "X"){
                 // programResult += title + ', ';
                 educationLevels += title + ', ';
-                
-                // console.log("it worked!!! " + addTo);
             }
             return educationLevels;
             // return eduLevels;
@@ -467,8 +412,6 @@ $.getJSON(jsonlink2, function (data2) {
     }); //end each
 
 });
-
-
 
 }
 
@@ -501,30 +444,83 @@ $.getJSON(jsonlink2, function (data2) {
         
         let othercountries = '';
         
-        console.log(countriesMap);
+        // console.log(countriesMap);
 
 
 
         //iterate through countriesMap variable
         if (mapType == 'overview'){
-        console.log("overview");
 
-            var geojson = L.geoJSON(countriesMap, {style: solidStyle, onEachFeature: onEachFeature})
+        // var geojson = L.geoJSON(countriesMap, {style: solidStyle, onEachFeature: onEachFeature})
+        var geojson = L.geoJSON(countriesMap, {onEachFeature: onEachFeature})
             .eachLayer(function (layer) {
                 let thislayercountry = layer.feature.properties.name;
 
+                var int = 0;
                 if (exists(countriesList2, thislayercountry) ){ //checking 2 dim array    
                     layer.addTo(map) //adds countries to map
+                    
                     countriesList2.forEach(e => {
 
-                        if (e[0] == thislayercountry) {
-                            console.log(layer);
-                            layer.setStyle({ "fillColor": getColor(e[1])}); //set color based on second value in array via getColor fn
-                            // layer.setStyle(testStyle);
-                            console.log(e[1]);
-                            layer.bindTooltip('<strong>' + layer.feature.properties.name + '</strong>' + '<br>Number of Supporting Agencies: ' + e[1]);
+                        if (e[0] == thislayercountry) { //if country matches other list
+                            // console.log(layer);
+                            // console.log (int);
+
+                            // first round with country 
+                            if (int == 0){
+                                // console.log(int + " hi!");
+                                layer.feature.properties["support"] = e[1];
+                                layer.feature.properties["preprimary"] = e[2];
+                                layer.feature.properties["primary"] = e[3];
+                                layer.feature.properties["secondary"] = e[4];
+                                // layer.feature.properties["postsecondary"] = e[5];
+                                layer.feature.properties["wfdsupport"] = e[6];
+                                layer.feature.properties["systems"] = e[7];
+                                if (e[8] != ''){
+                                    layer.feature.properties["agencies"] = e[8];
+                                }
+                                // console.log(e[8])
+                                layer.bindTooltip('<strong>' + layer.feature.properties.name + '</strong>' + '<br>Number of Supporting Agencies: ' + e[1]);
+                            }
+
+                            // other rounds
+                            else{
+                                if (e[2] == 1){layer.feature.properties["preprimary"]++;} 
+                                if (e[3] == 1){layer.feature.properties["primary"]++;} 
+                                if (e[4] == 1){layer.feature.properties["secondary"]++;} 
+                                // if (e[5] == 1){layer.feature.properties["postsecondary"]++;} 
+                                if (e[6] == 1){layer.feature.properties["wfdsupport"]++;} 
+                                if (e[7] == 1){layer.feature.properties["systems"]++;} 
+
+                                if (e[8] != ''){
+                                    if (layer.feature.properties["agencies"]){
+                                        layer.feature.properties["agencies"] += ' ' + e[8];
+                                    }
+                                    else {
+                                        layer.feature.properties["agencies"] = e[8];
+                                    }
+                                }
+                            }
+
+                            // country, supportnum, preprimary, primary, secondary, postsecondary, wfdsupport, systems, alias
+
+                            // layer.setStyle({ "fillColor": getColor(e[1])}); //set color based on second value in array via getColor fn
+
+                            layer.setStyle(colorstyle(layer.feature));
+
+                            if (layer.feature.properties.name == "Mali"){
+                                console.log(layer.feature.properties);
+                                // console.log(e[8]);
+                                
+                            }
+
+                            // console.log(layer.feature.properties);
+
+                            //add tooltip
+                            int++;
                         }
 
+                        
                     });
                 }
 
@@ -544,8 +540,6 @@ $.getJSON(jsonlink2, function (data2) {
                 othercountries += thislayercountry;
             });//L.geoJSON eachLayer function
         }//overview
-
-
 
         let prevLayerClicked = null;
         function clickFeature(e) {
@@ -571,7 +565,7 @@ $.getJSON(jsonlink2, function (data2) {
             let layer = e.target;
             // layer.bringToFront();
 
-            console.log("highlight");
+            // console.log("highlight");
             // layer.setStyle({ color: usaidRed});
 
             // if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -594,10 +588,30 @@ $.getJSON(jsonlink2, function (data2) {
             return  d == 1 ? '#aec7eb' :
                     d == 2 ? '#8ba3cb' :
                     d == 3 ? '#6b83ae' :
-                    d >= 4 ? '#516692' :
-                            'rgb(80, 101, 148)'; //none?
+                    d == 4 ? '#516692' :
+                    d >= 5 ? '#205493' :
+                    'rgb(80, 101, 148)'; //none?
         }
         
+        function colorstyle(feature) {
+                let supportnum;
+
+                if (!feature.properties){
+                    supportnum = 0;
+                }
+                else{
+                    supportnum = feature.properties.support
+                }
+
+            return {
+                fillColor: getColor(supportnum),
+                weight: 1,
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 1
+            };
+        }
+
         //sample
         function solidStyle2(feature) {
             return {
@@ -610,9 +624,187 @@ $.getJSON(jsonlink2, function (data2) {
             };
         }
 
+    let supportFilter = 'None';
+    let filterDOL = 0;
+    let filterMCC = 0;
+    let filterPC = 0;
+    let filterState = 0;
+    let filterUSAID = 0;
+    let filterUSDA = 0;
+
+    $("input[type='checkbox']").on("change",function(){
+        let id = $(this).attr('id');
+        // console.log(id);
+        let checked = $(this).is(":checked");
+        if (checked){
+            check = 1;
+        }
+        else {
+            check = 0;
+        }
+
+        if (id == "dol"){
+            filterDOL = check;
+        }
+        if (id == "mcc"){
+            filterMCC = check;
+            // changeVal(check);
+        }
+        if (id == "pc"){
+            filterPC = check; // changeVal(check);
+        }
+        if (id == "usdos"){
+            filterState = check;// changeVal(check);
+        }
+        if (id == "usaid"){
+            filterUSAID = check;// changeVal(check);
+        }
+        if (id == "usda"){
+            filterUSDA = check;// changeVal(check);
+        }
+
+        console.log (filterDOL + ' ' + filterMCC + ' ' + filterPC + ' ' + filterState + ' ' + filterUSAID + ' ' + filterUSDA)
+
+        changeFilter();
+    });
+
+    // function changeVal(check){
+    //     if (check == TRUE ){
+    //         return 1;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    // }
+
+    function changeFilter (){
+        const terms = [];
+
+        supportFilter = $('#support-filter').val();
+        console.log(supportFilter);
+        
+        console.log("dol ?? " + filterDOL)
+
+        if (filterDOL == 1){
+            terms.push("dol"); 
+            console.log("done");
+        }
+        if (filterMCC == 1){
+            terms.push("mcc"); 
+            console.log("done");
+        }
+        if (filterPC == 1){
+            terms.push("uspc"); 
+            console.log("done");
+        }
+        if (filterState == 1){
+            terms.push("usdos"); 
+            console.log("done");
+        }
+        if (filterUSAID == 1){
+            terms.push("usaid"); 
+            console.log("done");
+        }
+        if (filterUSDA == 1){
+            terms.push("usda");
+            console.log("done");
+        }
+
+        console.log(terms);
+
+        geojson.eachLayer(function (layer) {
+            let agencies = layer.feature.properties["agencies"];
+            
+            let containsSupportTerms = false; 
+
+            if (agencies) {
+                containsSupportTerms = terms.every(term => agencies.includes(term));
+            }
+
+            console.log(terms);
+
+
+            if (supportFilter == "none" && terms == '' ){
+                layer.setStyle({fillColor : 'gray'});
+                console.log("IF!!!!!");
+            }
+            else if(supportFilter == "none"){
+                console.log("ELSE IF!!!!!");
+                if(containsSupportTerms) {
+                    // layer.setStyle({fillColor : usaidLightBlue});
+                    layer.setStyle({fillColor : usaidLightBlue})
+                }
+                else {
+                    layer.setStyle({fillColor : 'gray'})
+                }
+            }
+            else{
+                if(layer.feature.properties[supportFilter] >= 1 && containsSupportTerms) {
+
+                    // if(layer.feature.properties[supportFilter] >= 1 && layer.feature.properties['dol'] >= filterDOL) {
+                    layer.setStyle({fillColor : usaidLightBlue});
+                    console.log(agencies);
+                }
+                else {
+                    layer.setStyle({fillColor : 'gray'})
+                }
+            }
+        });
+
+    }
+
+    //on change filter
+
+    // On change check the other boxes if they are checked or not
+    // Then check against other formulae
+    $('#support-filter').on('change', function() {
+
+        changeFilter();
+
+    });
+
+    // Controls
+    $(".map1").click(function() {
+        $(this).addClass("selected");
+        $(this).siblings().removeClass("selected");
+        console.log( "Map1 selected" );
+        $(".map-countries").removeClass("detailedmap");
+        $("#country-wrapper").removeClass("show");
+        $("#projects-wrapper").removeClass("show");
+        $(".legend").show();
+        $(".legend2").hide();
+        $(".mapfilter").hide();
+        geojson.eachLayer(function (layer) {
+            layer.setStyle(colorstyle(layer.feature));
+        });
+    });
+    
+    $(".map2").click(function() {
+        $(this).addClass("selected");
+        $(this).siblings().removeClass("selected");
+        console.log("Map2 selected." );
+        // $(".map-countries").addClass("detailedmap");
+        $("#country-wrapper").addClass("show");
+        $("#projects-wrapper").addClass("show");
+        $(".legend").hide();
+        $(".legend2").show();
+        $(".mapfilter").show();
+        
+        changeFilter();
+    });
+
+    $(".map-countries").hover(function() {
+        $(this).addClass("hover");
+    });
+
+    $(".map-countries").click(function() {
+        $(this).addClass("selected");
+        // $(this).siblings().removeClass("selected");
+        console.log("click");
+    });
 
     });//end $.getJSON(jsonlink, function (data) {
-    
+
     // leafletjs init map
     let map = L.map('map').setView([0, 0], 2);
 
@@ -626,7 +818,6 @@ $.getJSON(jsonlink2, function (data2) {
     let solidStyle = {
         "color": "#fff",
         // "fillColor": "#A7C6ED",
-        
         "fillOpacity": 1,
         "opacity": 0.5,
         "weight": 2,
@@ -639,17 +830,17 @@ $.getJSON(jsonlink2, function (data2) {
         className : "select-test"
     }
 
-
     /*Legend specific*/
     var legend = L.control({ position: "bottomleft" });
 
     legend.onAdd = function(map) {
         var legendKey = L.DomUtil.create("div", "legend");
         legendKey.innerHTML += "<h4>Number of Supporting Agencies</h4>";
-        legendKey.innerHTML += '<i style="background: #516692"></i><span>1</span><br>';
-        legendKey.innerHTML += '<i style="background: #6b83ae"></i><span>2</span><br>';
-        legendKey.innerHTML += '<i style="background: #8ba3cb"></i><span>3</span><br>';
-        legendKey.innerHTML += '<i style="background: #aec7eb"></i><span>4</span><br>';
+        legendKey.innerHTML += '<i style="background: #516692"></i><span>5</span><br>';
+        legendKey.innerHTML += '<i style="background: #516692"></i><span>4</span><br>';
+        legendKey.innerHTML += '<i style="background: #6b83ae"></i><span>3</span><br>';
+        legendKey.innerHTML += '<i style="background: #8ba3cb"></i><span>2</span><br>';
+        legendKey.innerHTML += '<i style="background: #aec7eb"></i><span>1</span><br>';
                 
         return legendKey;
     };
@@ -666,40 +857,26 @@ $.getJSON(jsonlink2, function (data2) {
     legend.addTo(map);
     legend2.addTo(map);
 
-    // Controls
-    
-    $(".map1").click(function() {
-        $(this).addClass("selected");
-        $(this).siblings().removeClass("selected");
-        console.log( "Map1 selected" );
-        $(".map-countries").removeClass("detailedmap");
-        $("#country-wrapper").removeClass("show");
-        $("#projects-wrapper").removeClass("show");
-        $(".legend").show();
-        $(".legend2").hide();
-    });
-    
-    $(".map2").click(function() {
-        $(this).addClass("selected");
-        $(this).siblings().removeClass("selected");
-        console.log("Map2 selected." );
-        $(".map-countries").addClass("detailedmap");
-        $("#country-wrapper").addClass("show");
-        $("#projects-wrapper").addClass("show");        
-        $(".legend").hide();
-        $(".legend2").show();
-    });
+    /*Filter Specific*/
+    var mapfilters = L.control({ position: "bottomright" });
 
-    $(".map-countries").hover(function() {
-        $(this).addClass("hover");
-    });
+    mapfilters.onAdd = function(map) {
+        var filtercontrol = L.DomUtil.create('div', 'mapfilter');
+        filtercontrol.innerHTML += '<h4>Agencies</h4>';
 
-    $(".map-countries").click(function() {
-        $(this).addClass("selected");
-        // $(this).siblings().removeClass("selected");
-        console.log("click");
-    });
+        filtercontrol.innerHTML += '<input type="checkbox" id="dol" name="dol" value="1"><label for="vehicle1">DOL</label><br>';
+        filtercontrol.innerHTML += '<input type="checkbox" id="mcc" name="mcc" value="1"><label for="vehicle1">MCC</label><br>';
+        filtercontrol.innerHTML += '<input type="checkbox" id="pc" name="pc" value="1"><label for="vehicle1">PC</label><br>';
+        filtercontrol.innerHTML += '<input type="checkbox" id="usdos" name="usdos" value="1"><label for="vehicle1">State</label><br>';
+        filtercontrol.innerHTML += '<input type="checkbox" id="usaid" name="usaid" value="1"><label for="vehicle1">USAID</label><br>';
+        filtercontrol.innerHTML += '<input type="checkbox" id="usda" name="usda" value="1"><label for="vehicle1">USDA</label><br></br>';
 
+        filtercontrol.innerHTML += '<select id="support-filter"><option value="none">None Selected</option><option value="preprimary">Pre-Primary</option><option value="primary">Primary</option><option value="secondary">Secondary</option><option value="wfdsupport">WFD Support</option><option value="systems">Systems Strengthening</option></select>';
+
+        return filtercontrol;
+    };
+
+    mapfilters.addTo(map);
 
 
 
