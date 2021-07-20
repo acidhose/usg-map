@@ -589,7 +589,7 @@ $.getJSON(jsonlink2, function (data2) {
                     d == 2 ? '#8ba3cb' :
                     d == 3 ? '#6b83ae' :
                     d == 4 ? '#516692' :
-                    d >= 5 ? '#205493' :
+                    d >= 5 ? '#002F6C' :
                     'rgb(80, 101, 148)'; //none?
         }
         
@@ -836,7 +836,7 @@ $.getJSON(jsonlink2, function (data2) {
     legend.onAdd = function(map) {
         var legendKey = L.DomUtil.create("div", "legend");
         legendKey.innerHTML += "<h4>Number of Supporting Agencies</h4>";
-        legendKey.innerHTML += '<i style="background: #516692"></i><span>5</span><br>';
+        legendKey.innerHTML += '<i style="background: #002F6C"></i><span>5</span><br>';
         legendKey.innerHTML += '<i style="background: #516692"></i><span>4</span><br>';
         legendKey.innerHTML += '<i style="background: #6b83ae"></i><span>3</span><br>';
         legendKey.innerHTML += '<i style="background: #8ba3cb"></i><span>2</span><br>';
