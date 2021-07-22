@@ -400,3 +400,7 @@ text-align:center;
 /* .support-table, .coordination-list{
     display:none;
 } */
+
+.state{
+  text-transform: inherit;
+}
