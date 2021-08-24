@@ -42,7 +42,6 @@ display:block;
 
 .project-dates {
 display: inline-block;
-/* padding: .5em; */
 background: #eee;
 }
 
@@ -50,9 +49,6 @@ background: #eee;
 .coordination-list {
     display: flex;
 }
-/* .coordination-list .support-column{
-     padding: .5em; 
-} */
 
 .coordination-list, .coordination-list .support-header{
     border-bottom:1px solid #888;
@@ -68,8 +64,6 @@ background: #eee;
 .coordination-cell {
     text-align: center;
     min-height: 30px;
-    /* vertical-align: center; */
-    /* display: table-cell; */
 }
 
 /* skip link */
@@ -98,15 +92,6 @@ z-index:999;
 }
 
 
-/* overrides for jquery UI */
-/* .current-country,
-.ui-accordion .ui-accordion-header,
-.ui-accordion .project-description,
-.project-dates,
-.project-implementorname,
-.project-subawardees,
-.project-link,
-.project-edulevel  */
 
 
 .ui-accordion-content{
@@ -145,13 +130,8 @@ border-bottom-left-radius: 0;
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
 border: none;
-/* background: #eee; */
 }
 /* end overrides for jquery UI */
-
-
-
-
 
 
 /* RTABLE FLIP */
@@ -198,13 +178,6 @@ border: none;
     background-position: 100% 0;
     background-size: 20px 100%;
   }
-
-  /*     
-  .rtable th,
-  .rtable td {
-    padding: 6px 12px;
-     border: 1px solid #d9d7ce;
-  } */
   
   .rtable--flip {
     display: flex;
@@ -246,14 +219,7 @@ border: none;
     border-left: 0;
   }
   
-  /* .rtable--flip th:not(:last-child),
-  .rtable--flip td:not(:last-child) {
-    border-bottom: 0;
-  } */
   /* END RTABLE FLIP */
-
-
-
 
 .support-table{
 width: 100%;
@@ -269,7 +235,6 @@ text-align:left;
 
 .support-row-header {
 text-align: center;
-/* max-width: 6em; */
 text-transform: uppercase;
 }
 
@@ -288,7 +253,6 @@ height: 11px;
 
 .rtable th, .rtable td {
 height: 2em;
-/* min-width: 5em; */
 font-weight: normal;
 }
 
@@ -361,23 +325,6 @@ text-align:center;
   display: none;
 }
 
-/* map layer colors */
-/* .activelayer{
-  fill: pink;
-} */
-
-/* .map-countries:hover,.map-countries.hover{
-  fill: #0067B9;
-} */
-
-/* .select-test {
-  fill: purple;
-}
-
-.map-countries.selected{
-  fill: hotpink;
-} */ 
-
 .legend i, .legend2 i {
   width: 18px;
   height: 18px;
@@ -397,11 +344,6 @@ text-align:center;
   background: rgba(255, 255, 255, 0.7);
   padding: 5px;
 }
-
-/* hide to show support stuff */
-/* .support-table, .coordination-list{
-    display:none;
-} */
 
 .state{
   text-transform: inherit;
