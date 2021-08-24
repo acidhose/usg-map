@@ -330,6 +330,7 @@ text-align:center;
   margin: 1px;
   display: inline-block;
 }
+
 .controls div.selected{
   background: #516692;
   color: white;
@@ -341,6 +342,7 @@ text-align:center;
 }
 .controls {
   width: 520px;
+  margin-bottom: 1em;
 }
 
 .detailedmap {

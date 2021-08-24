@@ -21,10 +21,9 @@ $(document).ready(function () {
         
         $.each(data, function(i, item) {
             // console.log(data[i]);
-			let name = data[i].name;
-			let description = data[i].description;
+			// let name = data[i].name;
+			// let description = data[i].description;
             let country = data[i].Country;
-            // let support = data[i]["Support List"];
             let supportnum = data[i]["Number of Supporting Agencies"];
             let preprimary = data[i]["Pre-Primary Education Support"];
             let primary = data[i]["Primary Education Support"];
@@ -340,14 +339,20 @@ $(document).ready(function () {
 
 $.getJSON(jsonlink2, function (data2) {
     //iterate thru
+
+    let programHolder = [];
+
+
     let count2 = $(data2).length;
     $.each(data2, function(i, item) {
         // let country2 = data2[i].country;
         let country2 = data2[i]["Country"];
         // console.log(selectedCountry)
         
-
+        // begin if loop
         if (country2 == selectedCountry) {
+
+            let programResult2 = '';
 
             //create variables
             let name = data2[i]["Activity Name"];
@@ -355,18 +360,52 @@ $.getJSON(jsonlink2, function (data2) {
             let start = data2[i]["Start Year"];
             let end = data2[i]["End Year"];
             let implementorname = data2[i]["Implementer"];
+            let agency = data2[i]["Agency"];
             // let subawardees = data2[i].subawardees;
             let link = data2[i]["Link to Website"];
             let eduLevels = "";
 
-            // add to result
-            programResult += '<div class="wrap"><h2 class="project-name">' + name + '</h2>';
+            // // add to result
+            // programResult += '<div class="wrap"><h2 class="project-name">' + name + '</h2>';
 
-            programResult += '<div><span class="project-description">';
-            programResult += description + '</span>';            
-            programResult += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';
-            programResult += '<span class="project-agency"><strong>Agency:</strong> ' + data2[i]["Agency"] + '</span>';
-            if (implementorname!='') { programResult += '<span class="project-implementorname"><strong>Implementor:</strong> ' + implementorname + '</span>';}
+            // programResult += '<div><span class="project-description">';
+            // programResult += description + '</span>';            
+            // programResult += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';
+            // programResult += '<span class="project-agency"><strong>Agency:</strong> ' + data2[i]["Agency"] + '</span>';
+            // if (implementorname!='') { programResult += '<span class="project-implementorname"><strong>Implementor:</strong> ' + implementorname + '</span>';}
+            
+            // var educationLevels = '';
+            
+            // checkEduLevel(data2[i]["Pre-Primary"], 'Pre-Primary');
+            // checkEduLevel(data2[i]["Primary"], 'Pre-Primary');
+            // checkEduLevel(data2[i]["Secondary"], 'Secondary');
+            // checkEduLevel(data2[i]["Workforce Development"], 'Workforce Development');
+            // checkEduLevel(data2[i]["Education Systems Strengthening"], 'Education Systems Strengthening');
+            
+            // if (educationLevels){
+            //     programResult += '<span class="project-edulevel"><strong>Education Level:</strong> ';
+            //     educationLevels = educationLevels.replace(/,\s*$/, ""); //remove final comma
+            //     programResult += educationLevels;
+            // }
+
+            // programResult += '</span>';
+
+            // if (link!='') { programResult += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
+
+            // programResult += '<div>';
+            // programResult += eduLevels;
+            // programResult += '</div>';
+
+            // programResult += '</div></div>';
+            // add to result
+
+            programResult2 += '<div class="wrap"><h2 class="project-name">' + name + '</h2>';
+
+            programResult2 += '<div><span class="project-description">';
+            programResult2 += description + '</span>';            
+            programResult2 += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';
+            programResult2 += '<span class="project-agency"><strong>Agency:</strong> ' + agency + '</span>';
+            if (implementorname!='') { programResult2 += '<span class="project-implementorname"><strong>Implementor:</strong> ' + implementorname + '</span>';}
             
             var educationLevels = '';
             
@@ -377,23 +416,71 @@ $.getJSON(jsonlink2, function (data2) {
             checkEduLevel(data2[i]["Education Systems Strengthening"], 'Education Systems Strengthening');
             
             if (educationLevels){
-                programResult += '<span class="project-edulevel"><strong>Education Level:</strong> ';
+                programResult2 += '<span class="project-edulevel"><strong>Education Level:</strong> ';
                 educationLevels = educationLevels.replace(/,\s*$/, ""); //remove final comma
-                programResult += educationLevels;
+                programResult2 += educationLevels;
             }
 
-            programResult += '</span>';
+            programResult2 += '</span>';
 
-            if (link!='') { programResult += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
+            if (link!='') { programResult2 += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
 
-            programResult += '<div>';
-            programResult += eduLevels;
-            programResult += '</div>';
+            programResult2 += '<div>';
+            programResult2 += eduLevels;
+            programResult2 += '</div>';
 
-            programResult += '</div></div>';
+            programResult2 += '</div></div>';
+
+            programHolder.push({'agency' : agency, 'result' : programResult2});
+
         }
+
+        // once if loop is done
         if (i+1 === count2) {
-            $("#projects-wrapper").html(programResult);
+            // console.log(programHolder);              
+
+            //search through array for matching and loop through those
+
+
+            // for(let i = 0; i < programHolder.length; i++) {
+
+            //     for(let j = 0; j < programHolder[i].length; j++) {
+            //         console.log(programHolder[i][j]);
+            //     }
+            // }
+
+
+            //group array by agency
+            const programGroups = programHolder.reduce((groups, item) => {
+                const group = (groups[item.agency] || []);
+                group.push(item);
+                groups[item.agency] = group;
+                return groups;
+              }, {});
+              
+            let allPrograms = '';
+
+            const ordered = Object.keys(programGroups).sort().reduce(
+                (obj, key) => { 
+                  obj[key] = programGroups[key]; 
+                  return obj;
+                }, 
+                {}
+            );
+
+            $.each(ordered, function(i, item) {
+                let agencyPrograms = '';
+                
+                for(let i = 0; i < item.length; i++) {
+                    if (i == 0){
+                        agencyPrograms += '<h4>'+ item[0]["agency"] +'</h4>';
+                    }
+                    agencyPrograms += item[i].result;
+                }
+                allPrograms += agencyPrograms;
+            });
+
+            $("#projects-wrapper").html(programResult + allPrograms);
             
             //create accordian
             $("#projects-wrapper" ).accordion({
