@@ -4,9 +4,6 @@ $(document).ready(function () {
      * Install Note: connect to data-country.json & data-activity.json if csv to JSON is not working   
      */
 
-    //jsonlink_country is being called to in header
-    //let jsonlink_country = 'scripts/data-country.json';
-
     let prevLayerClicked = null;
 
     let mapType = "overview";
@@ -304,9 +301,7 @@ $.getJSON(jsonlink_activity, function (data2) {
 
     let count2 = $(data2).length;
     $.each(data2, function(i, item) {
-        // let country2 = data2[i].country;
         let country2 = data2[i]["Country"];
-        // console.log(selectedCountry)
         
         // begin if loop
         if (country2 == selectedCountry) {
@@ -320,7 +315,6 @@ $.getJSON(jsonlink_activity, function (data2) {
             let end = data2[i]["End Year"];
             let implementorname = data2[i]["Implementer"];
             let agency = data2[i]["Agency"];
-            // let subawardees = data2[i].subawardees;
             let link = data2[i]["Link to Website"];
             let eduLevels = "";
 
@@ -431,6 +425,7 @@ $.getJSON(jsonlink_activity, function (data2) {
                     if (prevLayerClicked !== null) {
                         prevLayerClicked.setStyle(solidStyle);
                         map.closePopup();
+                        // console.log(layer.feature.properties); //for test
                     }
                     
                     layer.setStyle(selectStyle);
@@ -466,7 +461,7 @@ $.getJSON(jsonlink_activity, function (data2) {
 
                         if (e[0] == thislayercountry) { //if country matches other list
 
-                            // first round with country 
+                            // first round with country registar data in object
                             if (int == 0){
                                 layer.feature.properties["support"] = e[1];
                                 layer.feature.properties["preprimary"] = e[2];
@@ -474,9 +469,14 @@ $.getJSON(jsonlink_activity, function (data2) {
                                 layer.feature.properties["secondary"] = e[4];
                                 layer.feature.properties["wfdsupport"] = e[6];
                                 layer.feature.properties["systems"] = e[7];
+
+                                layer.feature.properties[e[8]] = []; //set up array
+                                layer.feature.properties[e[8]].push(e[2], e[3], e[4], e[6], e[7]);
+
                                 if (e[8] != ''){
                                     layer.feature.properties["agencies"] = e[8];
                                 }
+
                                 layer.bindTooltip('<strong>' + layer.feature.properties.name + '</strong>' + '<br>Number of Supporting Agencies: ' + e[1]);
                             }
 
@@ -487,6 +487,9 @@ $.getJSON(jsonlink_activity, function (data2) {
                                 if (e[4] == 1){layer.feature.properties["secondary"]++;} 
                                 if (e[6] == 1){layer.feature.properties["wfdsupport"]++;} 
                                 if (e[7] == 1){layer.feature.properties["systems"]++;} 
+                                
+                                layer.feature.properties[e[8]] = []; //set up array
+                                layer.feature.properties[e[8]].push(e[2], e[3], e[4], e[6], e[7]);
 
                                 if (e[8] != ''){
                                     if (layer.feature.properties["agencies"]){
@@ -522,20 +525,6 @@ $.getJSON(jsonlink_activity, function (data2) {
 
         let prevLayerClicked = null;
         
-        function clickFeature(e) {
-            let layer = e.target;
-
-            layer.setStyle({ "fillColor": usaidRed })
-
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                layer.bringToFront();
-            }
-            if (prevLayerClicked !== null) {
-                prevLayerClicked.setStyle(solidStyle);
-            }
-            prevLayerClicked = layer;
-        }
-        
         function resetHighlight(e) {
             let layer = e.target;
             layer.setStyle({ fillOpacity: 1 });
@@ -554,10 +543,6 @@ $.getJSON(jsonlink_activity, function (data2) {
                 mouseover: highlightFeature,
                 mouseout: resetHighlight,
             });
-        }
-
-        function onClickMap(e) {
-            e.layer._icon.classList.add('activemarker');
         }
 
         function getColor(d) {
@@ -585,18 +570,6 @@ $.getJSON(jsonlink_activity, function (data2) {
                 opacity: 1,
                 color: 'white',
                 fillOpacity: 1
-            };
-        }
-
-        //sample
-        function solidStyle2(feature) {
-            return {
-                "color": "#fff",
-                "fillColor": "#A7C6ED",
-                "fillOpacity": 1.0,
-                "opacity": 1,
-                "weight": 2,
-                "className": "map-countries",
             };
         }
 
@@ -639,6 +612,7 @@ $.getJSON(jsonlink_activity, function (data2) {
 
         // console.log (filterDOL + ' ' + filterMCC + ' ' + filterPC + ' ' + filterState + ' ' + filterUSAID + ' ' + filterUSDA)
 
+
         changeFilter();
     });
 
@@ -648,7 +622,8 @@ $.getJSON(jsonlink_activity, function (data2) {
         supportFilter = $('#support-filter').val();
         
         if (filterDOL == 1){
-            terms.push("dol"); 
+            // terms.push("dol"); 
+            terms.push("usdol"); 
         }
         if (filterMCC == 1){
             terms.push("mcc"); 
@@ -674,9 +649,11 @@ $.getJSON(jsonlink_activity, function (data2) {
             if (agencies) {
                 containsSupportTerms = terms.every(term => agencies.includes(term));
             }
+
             if (supportFilter == "none" && terms == '' ){
                 layer.setStyle({fillColor : 'gray'});
             }
+
             else if(supportFilter == "none"){
                 if(containsSupportTerms) {
                     layer.setStyle({fillColor : usaidLightBlue})
@@ -685,16 +662,72 @@ $.getJSON(jsonlink_activity, function (data2) {
                     layer.setStyle({fillColor : 'gray'})
                 }
             }
-            else{
-                if(layer.feature.properties[supportFilter] >= 1 && containsSupportTerms) {
+            
 
-                    layer.setStyle({fillColor : usaidLightBlue});
-                    // console.log(agencies);
+            else if (terms == '' && supportFilter != "none"){
+
+                if(layer.feature.properties[supportFilter] >= 1 && containsSupportTerms) {
+                    layer.setStyle({
+                        fillColor : usaidLightBlue
+                    });
                 }
                 else {
                     layer.setStyle({fillColor : 'gray'})
                 }
+
             }
+            
+            else{
+                //loop through the terms selected
+                let counter = 0;
+                let arrayLength = terms.length;
+                
+                for (let i = 0; i < arrayLength; ) {
+                    
+                    let term = terms[i];
+
+                    if (layer.feature.properties[term]){ //check if object has term
+                        
+                        // note this could be improved with keys on the objects    
+                        // counter is iterated when a match occurs                   
+                        if (supportFilter == 'preprimary' && layer.feature.properties[term][0] == 1 ) {
+                            counter++;
+                        }
+                        if (supportFilter == 'primary' && layer.feature.properties[term][1] == 1 ) {
+                            counter++;
+                        }
+                        if (supportFilter == 'secondary' && layer.feature.properties[term][2] == 1 ) {
+                            counter++;
+                        }
+                        if (supportFilter == 'wfdsupport' && layer.feature.properties[term][3] == 1 ) {
+                            counter++;
+                        }
+                        if (supportFilter == 'systems' && layer.feature.properties[term][4] == 1 ) {
+                            counter++;
+                        }
+
+                    }
+
+                    i++ //add to i
+
+                    //if it gets to the end, and all agencies have the selected terms  
+                    //if counter matches the number of terms
+                    if (i == arrayLength && i == counter){
+                        if (i == arrayLength && counter == arrayLength ){
+                            console.log (i + '  --> ' + arrayLength);
+                            layer.setStyle({fillColor : usaidLightBlue});
+                        }
+                    }
+                    
+                    else {
+                        layer.setStyle({fillColor : 'gray'})
+                    }
+    
+
+                }//end for
+
+            }
+
         });
 
     }
