@@ -1,4 +1,4 @@
-# Higher Education Map Instructions
+# USG Map Instructions
 
 
 ## Install
@@ -51,7 +51,7 @@
 You can remove the H1 header text, but everything else should stay as-is:
 
         <!-- Begin HE Map -->
-        <div class="he-wrapper">
+        <div class="he-wrapper usg-map">
             <h1>USG Support to Basic Education</h1>
             <div class="controls">
                 <div class="map1 selected">USG Support Overview</div>
