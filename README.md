@@ -1,4 +1,4 @@
-# Higher Education Map Instructions
+# USG Map Instructions
 
 
 ## Install
