@@ -249,6 +249,8 @@ fill: #0067B9;
 svg.box {
 fill: #b30021;
 height: 11px;
+padding: 0;
+border: none;
 }
 
 .rtable th, .rtable td {
@@ -261,7 +263,12 @@ width: 100%;
 border-bottom: 1px solid #888;
 }
 
-.support-row-header, .top-left {
+.he-wrapper th, .he-wrapper td {
+  border: initial;
+  padding: inherit;
+}
+
+.he-wrapper .support-row-header,.he-wrapper .top-left {
 border-bottom: 1px solid #888;
 }
 
@@ -347,4 +354,30 @@ text-align:center;
 
 .state{
   text-transform: inherit;
+}
+
+/* overriding styles in theme */
+.he-wrapper {
+  line-height: initial;
+}
+
+.he-wrapper *{
+/* fix for animated elements */
+  -webkit-transition-duration: 0s;
+  -moz-transition-duration: 0s;
+  -o-transition-duration: 0s;
+  transition-duration: 0s;
+}
+
+.he-wrapper h2{
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 1.7em;
+}
+
+.legend.leaflet-control{
+  background-color: transparent; 
+  border-top:0 ;
+  margin: auto;
+  padding: auto;
 }
