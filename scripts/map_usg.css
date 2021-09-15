@@ -320,7 +320,7 @@ text-align:center;
   fill: #A7C6ED;
 }
 
-#country-wrapper .detailed, #projects-wrapper{
+.usg-map #country-wrapper .detailed, .usg-map #projects-wrapper{
   display: none;
 }
 
