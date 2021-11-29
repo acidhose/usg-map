@@ -54,8 +54,8 @@ You can remove the H1 header text, but everything else should stay as-is:
         <div class="he-wrapper usg-map">
             <h1>USG Support to Basic Education</h1>
             <div class="controls">
-                <div class="map1 selected">USG Support Overview</div>
-                <div class="map2">Detailed View</div>
+                <div class="map1 selected">Detailed View</div>
+                <div class="map2">USG Support Overview</div>
             </div>
 
             <form id="countries">

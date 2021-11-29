@@ -747,8 +747,8 @@ $.getJSON(jsonlink_activity, function (data2) {
     $(".map1").click(function() {
         $(this).addClass("selected");
         $(this).siblings().removeClass("selected");
-        $("#country-wrapper").addClass("show");
-        $("#projects-wrapper").addClass("show");
+        $("#country-wrapper").removeClass("hiding");
+        $("#projects-wrapper").removeClass("hiding");
         $(".legend").hide();
         $(".legend2").show();
         $(".mapfilter").show();
@@ -759,8 +759,8 @@ $.getJSON(jsonlink_activity, function (data2) {
         $(this).addClass("selected");
         $(this).siblings().removeClass("selected");
         $(".map-countries").removeClass("detailedmap");
-        $("#country-wrapper").removeClass("show");
-        $("#projects-wrapper").removeClass("show");
+        $("#country-wrapper").addClass("hiding");
+        $("#projects-wrapper").addClass("hiding");
         $(".legend").show();
         $(".legend2").hide();
         $(".mapfilter").hide();

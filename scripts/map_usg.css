@@ -325,6 +325,10 @@ text-align:center;
   display: inline;
 }
 
+#country-wrapper.hiding .detailed, #projects-wrapper.hiding {
+  display: none;
+}
+
 .legend {
   display:none;
 }
