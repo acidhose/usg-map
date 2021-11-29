@@ -320,27 +320,21 @@ text-align:center;
   fill: #A7C6ED;
 }
 
-.usg-map #country-wrapper .detailed, .usg-map #projects-wrapper{
-  display: none;
-}
 
 #country-wrapper.show .detailed, #projects-wrapper.show {
   display: inline;
 }
 
-#country-wrapper.show .overview {
-  display: none;
+.legend {
+  display:none;
 }
+
 
 .legend i, .legend2 i {
   width: 18px;
   height: 18px;
   float: left;
   margin: 0 8px 0 0;
-}
-
-.legend2, .mapfilter{
-  display:none;
 }
 
 .leaflet-control h4 {

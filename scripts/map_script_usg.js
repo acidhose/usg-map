@@ -502,7 +502,11 @@ $.getJSON(jsonlink_activity, function (data2) {
                             }
 
                             //set color based on # of supporting agencies
-                            layer.setStyle(colorstyle(layer.feature));
+                            // layer.setStyle(colorstyle(layer.feature));
+                            //
+
+                            layer.setStyle(detailedBaseStyle);
+                            // changeFilter();
 
                             int++;
                         }
@@ -622,7 +626,6 @@ $.getJSON(jsonlink_activity, function (data2) {
         supportFilter = $('#support-filter').val();
         
         if (filterDOL == 1){
-            // terms.push("dol"); 
             terms.push("usdol"); 
         }
         if (filterMCC == 1){
@@ -744,6 +747,17 @@ $.getJSON(jsonlink_activity, function (data2) {
     $(".map1").click(function() {
         $(this).addClass("selected");
         $(this).siblings().removeClass("selected");
+        $("#country-wrapper").addClass("show");
+        $("#projects-wrapper").addClass("show");
+        $(".legend").hide();
+        $(".legend2").show();
+        $(".mapfilter").show();
+        changeFilter();
+    });
+
+    $(".map2").click(function() {
+        $(this).addClass("selected");
+        $(this).siblings().removeClass("selected");
         $(".map-countries").removeClass("detailedmap");
         $("#country-wrapper").removeClass("show");
         $("#projects-wrapper").removeClass("show");
@@ -755,17 +769,6 @@ $.getJSON(jsonlink_activity, function (data2) {
         });
     });
     
-    $(".map2").click(function() {
-        $(this).addClass("selected");
-        $(this).siblings().removeClass("selected");
-        $("#country-wrapper").addClass("show");
-        $("#projects-wrapper").addClass("show");
-        $(".legend").hide();
-        $(".legend2").show();
-        $(".mapfilter").show();
-        
-        changeFilter();
-    });
 
     $(".map-countries").hover(function() {
         $(this).addClass("hover");
@@ -792,6 +795,15 @@ $.getJSON(jsonlink_activity, function (data2) {
         fillOpacity: 1,
         opacity: 0.5,
         weight: 2,
+        className: "map-countries",
+    };
+
+    let detailedBaseStyle = {
+        color: "#fff",
+        fillColor: "gray",
+        fillOpacity: 1,
+        opacity: 0.5,
+        weight: 1,
         className: "map-countries",
     };
 
