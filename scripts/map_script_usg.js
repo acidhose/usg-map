@@ -22,7 +22,7 @@ $(document).ready(function () {
             let primary = data[i]["Primary Education Support"];
             let secondary = data[i]["Secondary Education Support"];
             let postsecondary = data[i]["Post-Secondary Education Support"];
-            let wfdsupport = data[i]["WFD Support List"];
+            let wfdsupport = data[i]["WFD Support"];
             let systems = data[i]["Systems Strengthening Support"];
 
             let agencysupport = data[i]["Agency Support"];
@@ -35,7 +35,7 @@ $(document).ready(function () {
                 if (agency == 'U.S. Department of Labor'){ alias = 'usdol'} 
                 if (agency == 'U.S. Department of State'){ alias = 'usdos'} 
                 if (agency == 'Millennium Challenge Corporation'){ alias = 'mcc'} 
-                if (agency == 'U.S. Peace Corps'){ alias = 'uspc'} 
+                if (agency == 'The Peace Corps'){ alias = 'uspc'} 
                 if (agency == 'USAID'){ alias = 'usaid'} 
             }
 
@@ -85,7 +85,7 @@ $(document).ready(function () {
             supportArr.push(["Primary Education Support", 0]);
             supportArr.push(["Secondary Education Support", 0]);
             supportArr.push(["Post-Secondary Education Support", 0]);
-            supportArr.push(["WFD Support List", 0]);
+            supportArr.push(["WFD Support", 0]);
             supportArr.push(["Systems Strengthening Support", 0]);
 
             var support0 = 0;
@@ -121,9 +121,10 @@ $(document).ready(function () {
             coordArr.push(["Joint Program Coordination / Management", 0]);
             coordArr.push(["Joint/Parallel Program Funding", 0]);
             coordArr.push(["Joint Agency Proposal Review", 0]);
-            coordArr.push(["Sharing Data", 0]);
-            coordArr.push(["Research", 0]);
-            coordArr.push(["Guidance", 0]);
+            coordArr.push(["Sharing Data, Research, Guidance", 0]);
+            // coordArr.push(["Sharing Data", 0]);
+            // coordArr.push(["Research", 0]);
+            // coordArr.push(["Guidance", 0]);
             coordArr.push(["Cross-Agency Trainings", 0]);
             coordArr.push(["Cross-Agency Education Meetings", 0]);
 
@@ -147,7 +148,7 @@ $(document).ready(function () {
                     if (data[i]["Pre-Primary Education Support"] == 1)      { support0 = 1 };
                     if (data[i]["Primary Education Support"] == 1)          { support1 = 1 };
                     if (data[i]["Secondary Education Support"] == 1)        { support2 = 1 };
-                    if (data[i]["WFD Support List"] == 1)                   { support3 = 1 };
+                    if (data[i]["WFD Support"] == 1)                   { support3 = 1 };
                     if (data[i]["Systems Strengthening Support"] == 1)      { support4 = 1 };
 
                     var supportFoo = new supportTest(support0, support1, support2, support3, support4);
@@ -156,14 +157,14 @@ $(document).ready(function () {
                     if (agency == 'U.S. Department of Labor'){ alias = 'usdol'} 
                     if (agency == 'U.S. Department of State'){ alias = 'usdos'} 
                     if (agency == 'Millennium Challenge Corporation'){ alias = 'mcc'} 
-                    if (agency == 'U.S. Peace Corps'){ alias = 'uspc'} 
+                    if (agency == 'The Peace Corps'){ alias = 'uspc'} 
                     if (agency == 'USAID'){ alias = 'usaid'} 
 
                     if (agency == 'U.S. Department of Agriculture')     { indexsplice = 0 }
                     if (agency == 'U.S. Department of Labor')           { indexsplice = 1 } 
                     if (agency == 'U.S. Department of State')           { indexsplice = 2 } 
                     if (agency == 'Millennium Challenge Corporation')   { indexsplice = 3 } 
-                    if (agency == 'U.S. Peace Corps')                   { indexsplice = 4 } 
+                    if (agency == 'The Peace Corps')                   { indexsplice = 4 } 
                     if (agency == 'USAID')                              { indexsplice = 5 } 
 
                     var toholder = [alias, 1,  supportFoo];
@@ -201,7 +202,7 @@ $(document).ready(function () {
                     supporttable += '<th>Pre-Primary Education Support</th>';
                     supporttable += '<th>Primary Education Support</th>';
                     supporttable += '<th>Secondary Education Support</th>';
-                    supporttable += '<th>WFD Support List</th>';
+                    supporttable += '<th>WFD Support</th>';
                     supporttable += '<th>Systems Strengthening Support</th>';      
 
                     supporttable += '</tr>';
@@ -321,8 +322,8 @@ $.getJSON(jsonlink_activity, function (data2) {
             programResult2 += '<div class="wrap"><h2 class="project-name">' + name + '</h2>';
 
             programResult2 += '<div><span class="project-description">';
-            programResult2 += description + '</span>';            
-            programResult2 += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';
+            programResult2 += description + '</span>';
+            if (start!=''||end!=''){programResult2 += '<span class="project-dates">' + start + ' &ndash; ' + end + '</span>';}
             programResult2 += '<span class="project-agency"><strong>Agency:</strong> ' + agency + '</span>';
             if (implementorname!='') { programResult2 += '<span class="project-implementorname"><strong>Implementor:</strong> ' + implementorname + '</span>';}
             
@@ -342,7 +343,7 @@ $.getJSON(jsonlink_activity, function (data2) {
 
             programResult2 += '</span>';
 
-            if (link!='') { programResult2 += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
+            if (link!=''&&link!='-') { programResult2 += '<br><span class="project-subawardees"><a href="' + link + '" target="_blank" title="Link opens in a new window">Link to Project</a></span>';}
 
             programResult2 += '<div>';
             programResult2 += eduLevels;
